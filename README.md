@@ -40,5 +40,5 @@ Please read CONTRIBUTING.md first.
 MIT — see LICENSE file
 
 ## Author
-Naga K — Power Platform Engineer
+Nagendra kumar Kosaraju — Power Platform Engineer
 [LinkedIn]https://www.linkedin.com/in/nagendra-kumar-kosaraju/
