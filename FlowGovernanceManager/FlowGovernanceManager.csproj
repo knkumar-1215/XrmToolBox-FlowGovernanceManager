@@ -250,6 +250,8 @@
     <Compile Include="Models\SolutionModel.cs" />
     <Compile Include="Models\WorkflowModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FlowDataService.cs" />
+    <Compile Include="Services\HealthScoreCalculator.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +259,7 @@
     <None Include="copy-plugin.bat" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)copy-plugin.bat" "$(TargetPath)"</PostBuildEvent>
