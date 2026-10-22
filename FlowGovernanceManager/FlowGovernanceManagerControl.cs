@@ -282,8 +282,7 @@ namespace FlowGovernanceManager
 
         private void btnApplyFilter_Click(object sender, EventArgs e)
         {
-            ShowInfoNotification(
-        "Filter not implemented yet.", null);
+            ApplyFilters();
         }
 
         private void btnExportExcel_Click(object sender, EventArgs e)
@@ -385,6 +384,63 @@ namespace FlowGovernanceManager
         }
 
         /// <summary>
+        /// Filters _allFlows based on dropdown selections.
+        /// Always filters from _allFlows (full list)
+        /// never from already filtered results.
+        /// Statistics panel always shows ALL flows totals.
+        /// </summary>
+        private void ApplyFilters()
+        {
+            if (_allFlows == null || _allFlows.Count == 0)
+                return;
+
+            var filtered = _allFlows.AsEnumerable();
+
+            // Health Status dropdown filter
+            var healthFilter = cboHealthStatus
+                .SelectedItem?.ToString();
+
+            if (healthFilter != "All")
+            {
+                filtered = filtered.Where(f =>
+                {
+                    switch (healthFilter)
+                    {
+                        case "Healthy":
+                            return f.HealthStatus ==
+                                   HealthStatus.Healthy;
+                        case "At Risk":
+                            return f.HealthStatus ==
+                                   HealthStatus.AtRisk;
+                        case "Critical":
+                            return f.HealthStatus ==
+                                   HealthStatus.Critical;
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            // Flow Status dropdown filter
+            var flowFilter = cboFlowStatus
+                .SelectedItem?.ToString();
+
+            if (flowFilter != "All Flows")
+            {
+                filtered = filtered.Where(f =>
+                    flowFilter == "Active Only"
+                        ? f.IsFlowActive
+                        : !f.IsFlowActive);
+            }
+
+            // Populate grid with filtered results
+            PopulateGrid(filtered.ToList());
+
+            // Statistics always shows ALL flows
+            UpdateStatistics(_allFlows);
+        }
+
+        /// <summary>
         /// Populates the grid with FlowModel data.
         /// Applies color coding based on health status.
         /// </summary>
@@ -444,7 +500,11 @@ namespace FlowGovernanceManager
                         break;
                 }
             }
+            // Clear automatic selection after populating
+            dgvFlows.ClearSelection();
         }
+
+        
 
         /// <summary>
         /// Updates the statistics panel with flow counts.
@@ -484,6 +544,7 @@ namespace FlowGovernanceManager
                 ? 0
                 : (int)Math.Round((double)part / total * 100);
         }
+
 
 
         #region IGitHubPlugin
