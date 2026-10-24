@@ -161,7 +161,7 @@ namespace FlowGovernanceManager
                 cboFlowStatus
             });
 
-            // ── Statistics panel (top right) ─────────────
+            // -----Statistics panel (top right) --------
 
             txtStatistics = new TextBox
             {
