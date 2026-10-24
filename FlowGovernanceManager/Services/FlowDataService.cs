@@ -168,7 +168,8 @@ namespace FlowGovernanceManager.Services
             List<WorkflowModel> workflows,
             List<OwnerModel> owners,
             List<FlowRunModel> flowRuns,
-            HealthScoreCalculator calculator)
+            HealthScoreCalculator calculator,
+            Dictionary<Guid, string> solutionNames)
         {
             var result = new List<FlowModel>();
 
@@ -220,7 +221,11 @@ namespace FlowGovernanceManager.Services
                     FailedRunsInLast30Days = failedRuns,
                     ErrorRate = errorRate,
                     DaysSinceLastRun = daysSinceLastRun,
-                    SolutionName = "" 
+                    SolutionName = solutionNames
+                                    .TryGetValue(workflow.WorkflowId,
+                                        out string solName)
+                                    ? solName
+                                    : ""
                 };
 
                 // Calculate health score
@@ -252,6 +257,106 @@ namespace FlowGovernanceManager.Services
                 case "running": return 0;
                 default: return 0;
             }
+        }
+
+        /// <summary>
+        /// Retrieves solution names for the given workflow IDs.
+        /// Uses solutioncomponent and solution entities joined
+        /// in memory to get friendly solution names.
+        /// Returns dictionary of workflowId - solutionName.
+        /// </summary>
+        public Dictionary<Guid, string> GetSolutionNames(
+            List<Guid> workflowIds)
+        {
+            if (workflowIds == null || workflowIds.Count == 0)
+                return new Dictionary<Guid, string>();
+
+            // Query solutioncomponent for workflows
+            var componentQuery = new QueryExpression(
+                "solutioncomponent")
+            {
+                ColumnSet = new ColumnSet(
+                    "objectid",
+                    "solutionid"),
+                NoLock = true
+            };
+
+            // componenttype 29 = workflow
+            componentQuery.Criteria.AddCondition(
+                "componenttype",
+                ConditionOperator.Equal, 29);
+
+            componentQuery.Criteria.AddCondition(
+                "objectid",
+                ConditionOperator.In,
+                workflowIds.Cast<object>().ToArray());
+
+            var components = _service
+                .RetrieveMultiple(componentQuery).Entities;
+
+            if (components.Count == 0)
+                return new Dictionary<Guid, string>();
+
+            // Get unique solution IDs
+            var solutionIds = components
+                .Select(c => c.GetAttributeValue<EntityReference>(
+                    "solutionid")?.Id ?? Guid.Empty)
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            // Query solution names
+            var solutionQuery = new QueryExpression("solution")
+            {
+                ColumnSet = new ColumnSet(
+                    "solutionid",
+                    "friendlyname",
+                    "uniquename"),
+                NoLock = true
+            };
+
+            solutionQuery.Criteria.AddCondition(
+                "solutionid",
+                ConditionOperator.In,
+                solutionIds.Cast<object>().ToArray());
+
+            var solutions = _service
+                .RetrieveMultiple(solutionQuery).Entities
+                .ToDictionary(
+                    s => s.Id,
+                    s => s.GetAttributeValue<string>(
+                        "friendlyname") ?? "Unknown");
+
+            // Build workflowId - solutionName dictionary
+            var result = new Dictionary<Guid, string>();
+
+            foreach (var component in components)
+            {
+                var workflowId = component
+                    .GetAttributeValue<Guid>("objectid");
+                var solutionId = component
+                                .GetAttributeValue<EntityReference>(
+                                    "solutionid")?.Id ?? Guid.Empty;
+
+                if (solutions.TryGetValue(
+                    solutionId, out string solutionName))
+                {
+                    // Flow may be in multiple solutions
+                    // take the first non-default one
+                    if (!result.ContainsKey(workflowId))
+                    {
+                        result[workflowId] = solutionName;
+                    }
+                    else if (result[workflowId] == "Default Solution"
+                        && solutionName != "Default Solution")
+                    {
+                        // Override default with named solution
+                        result[workflowId] = solutionName;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
