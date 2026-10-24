@@ -329,11 +329,17 @@ namespace FlowGovernanceManager
                         .ToList();
                     var flowRuns = service.GetFlowRuns(flowIds);
 
-                    // Step 4 — Build combined FlowModel list
+                    // Step 4 — Get solution names
+                    worker.ReportProgress(80,
+                        "Loading solution names...");
+                    var solutionNames = service.GetSolutionNames(flowIds);
+
+                    // Step 5 — Build combined FlowModel list
+
                     worker.ReportProgress(90,
                         "Calculating health scores...");
                     args.Result = service.BuildFlowModels(
-                        workflows, owners, flowRuns, calculator);
+                        workflows, owners, flowRuns, calculator, solutionNames);
                 },
                 ProgressChanged = e =>
                 {
