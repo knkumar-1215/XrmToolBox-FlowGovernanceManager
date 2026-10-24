@@ -335,6 +335,7 @@ namespace FlowGovernanceManager
                     var solutionNames = service.GetSolutionNames(flowIds);
 
                     // Step 5 — Build combined FlowModel list
+
                     worker.ReportProgress(90,
                         "Calculating health scores...");
                     args.Result = service.BuildFlowModels(
