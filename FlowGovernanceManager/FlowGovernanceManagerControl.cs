@@ -53,7 +53,7 @@ namespace FlowGovernanceManager
                 out mySettings))
             {
                 mySettings = new Settings();
-                LogWarning("Settings not found — using defaults");
+                LogWarning("Settings not found - using defaults");
             }
             else
             {
@@ -72,10 +72,10 @@ namespace FlowGovernanceManager
                     "Click Load Flows to begin.", null);
                 // Enable controls if already connected
                 tsbLoadFlows.Enabled = true;
-                tsbExportExcel.Enabled = true;
-                tsbApplyFilter.Enabled = true;
-                cboHealthStatus.Enabled = true;
-                cboFlowStatus.Enabled = true;
+                tsbExportExcel.Enabled = false;
+                tsbApplyFilter.Enabled = false;
+                cboHealthStatus.Enabled = false;
+                cboFlowStatus.Enabled = false;
             }
             else
             {
@@ -93,7 +93,11 @@ namespace FlowGovernanceManager
             {
                 Text = "Load Flows",
                 DisplayStyle = ToolStripItemDisplayStyle.Text,
-                Enabled = false  // disabled until connected
+                Enabled = false, 
+                BackColor = System.Drawing.Color.FromArgb(0, 120, 212),
+                ForeColor = System.Drawing.Color.White,
+                Font = new System.Drawing.Font("Segoe UI", 9f,
+                           System.Drawing.FontStyle.Bold)
             };
             tsbLoadFlows.Click += btnLoadFlows_Click;
 
@@ -101,7 +105,11 @@ namespace FlowGovernanceManager
             {
                 Text = "Export to Excel",
                 DisplayStyle = ToolStripItemDisplayStyle.Text,
-                Enabled = false
+                Enabled = false,
+                BackColor = System.Drawing.Color.FromArgb(16, 124, 16),
+                ForeColor = System.Drawing.Color.White,
+                Font = new System.Drawing.Font("Segoe UI", 9f,
+                            System.Drawing.FontStyle.Bold)
             };
             tsbExportExcel.Click += btnExportExcel_Click;
 
@@ -144,7 +152,11 @@ namespace FlowGovernanceManager
             {
                 Text = "Apply Filter",
                 DisplayStyle = ToolStripItemDisplayStyle.Text,
-                Enabled = false
+                Enabled = false,
+                BackColor = System.Drawing.Color.FromArgb(96, 96, 96),
+                ForeColor = System.Drawing.Color.White,
+                Font = new System.Drawing.Font("Segoe UI", 9f,
+                           System.Drawing.FontStyle.Bold)
             };
             tsbApplyFilter.Click += btnApplyFilter_Click;
             // Add all to toolbar
@@ -153,12 +165,12 @@ namespace FlowGovernanceManager
                 tssSeparator2,
                 tsbLoadFlows,
                 tsbExportExcel,
-                tsbApplyFilter,
                 tssSeparator3,
                 tslHealthStatus,
                 cboHealthStatus,
                 tslFlowStatus,
-                cboFlowStatus
+                cboFlowStatus,
+                tsbApplyFilter
             });
 
             // ── Statistics panel (top right) ─────────────
@@ -244,7 +256,7 @@ namespace FlowGovernanceManager
                 {
                     Name       = "colFlowStatus",
                     HeaderText = "Flow Status",
-                    FillWeight = 8
+                    FillWeight = 12
                 },
                 new DataGridViewTextBoxColumn
                 {
@@ -343,6 +355,15 @@ namespace FlowGovernanceManager
                 Message = "Loading Power Automate flows...",
                 Work = (worker, args) =>
                 {
+                    this.Invoke((Action)(() =>
+                    {
+                        tsbLoadFlows.Enabled = false;
+                        tsbExportExcel.Enabled = false;
+                        tsbApplyFilter.Enabled = false;
+                        cboHealthStatus.Enabled = false;
+                        cboFlowStatus.Enabled = false;
+                    }));
+
                     var service = new FlowDataService(Service);
 
                     // Step 1 — Get all cloud flows
@@ -423,6 +444,12 @@ namespace FlowGovernanceManager
                     {
                         LogWarning("Notification failed: {0}", ex.Message);
                     }
+
+                    tsbLoadFlows.Enabled = true;
+                    tsbExportExcel.Enabled = true;
+                    tsbApplyFilter.Enabled = true;
+                    cboHealthStatus.Enabled = true;
+                    cboFlowStatus.Enabled = true;
                 }
             });
         }
@@ -478,7 +505,19 @@ namespace FlowGovernanceManager
             }
 
             // Populate grid with filtered results
-            PopulateGrid(filtered.ToList());
+            var results = filtered.ToList();
+
+            if (results.Count == 0)
+            {
+                dgvFlows.Rows.Clear();
+                ShowWarningNotification(
+                    "No flows match the selected filters.", null);
+            }
+            else
+            {
+                HideNotification();
+                PopulateGrid(results);
+            }
 
             // Statistics always shows ALL flows
             UpdateStatistics(_allFlows);
@@ -577,7 +616,7 @@ namespace FlowGovernanceManager
                     $"({Percent(atRisk, total)}%)\r\n" +
                 $"Critical:         {critical} " +
                     $"({Percent(critical, total)}%)\r\n" +
-                $"─────────────────────\r\n" +
+                $"-----------------\r\n" +
                 $"Ownerless:        {ownerless}\r\n" +
                 $"Inactive 90+ days:{inactive}";
         }
@@ -675,10 +714,10 @@ namespace FlowGovernanceManager
                     if (tsbLoadFlows != null)
                     {
                         tsbLoadFlows.Enabled = true;
-                        tsbExportExcel.Enabled = true;
-                        tsbApplyFilter.Enabled = true;
-                        cboHealthStatus.Enabled = true;
-                        cboFlowStatus.Enabled = true;
+                        tsbExportExcel.Enabled = false;
+                        tsbApplyFilter.Enabled = false;
+                        cboHealthStatus.Enabled = false;
+                        cboFlowStatus.Enabled = false;
                     }
                 }
             }
