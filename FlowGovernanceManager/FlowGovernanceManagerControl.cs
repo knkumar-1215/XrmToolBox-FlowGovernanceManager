@@ -287,8 +287,46 @@ namespace FlowGovernanceManager
 
         private void btnExportExcel_Click(object sender, EventArgs e)
         {
-            ShowInfoNotification(
-                    "Not Implemented yet", null);
+            if (_allFlows == null || _allFlows.Count == 0)
+            {
+                ShowWarningNotification("No flows loaded. Click Load Flows first.", null);
+                return;
+            }
+
+            using (var saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Title = "Export Flow Governance Report";
+                saveDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
+                saveDialog.FileName = string.Format(
+                    "FlowGovernanceReport_{0}.xlsx",
+                    DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+
+                if (saveDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                try
+                {
+                    tsbExportExcel.Enabled = false;
+
+                    var exporter = new ExcelExporter();
+                    exporter.Export(_allFlows, saveDialog.FileName);
+
+                    ShowInfoNotification(
+                        string.Format("Report exported to {0}", saveDialog.FileName),
+                        null);
+
+                    // Open the file in Excel after export
+                    System.Diagnostics.Process.Start(saveDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorDialog(ex, "Export to Excel failed");
+                }
+                finally
+                {
+                    tsbExportExcel.Enabled = true;
+                }
+            }
         }
 
         private void btnLoadFlows_Click(object sender, EventArgs e)
