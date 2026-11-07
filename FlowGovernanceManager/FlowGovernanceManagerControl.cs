@@ -69,8 +69,8 @@ namespace FlowGovernanceManager
             if (Service != null)
             {
                 ShowInfoNotification(
-                    "Click Load Flows to begin.", null);
-                // Enable controls if already connected
+                        $"Connected to {ConnectionDetail.OrganizationFriendlyName}. " +
+                        "Click Load Flows to begin.", null);              
                 tsbLoadFlows.Enabled = true;
                 tsbExportExcel.Enabled = false;
                 tsbApplyFilter.Enabled = false;
@@ -698,29 +698,26 @@ namespace FlowGovernanceManager
 
                 LogInfo("Connected to: {0}",
                     detail.OrganizationFriendlyName);
-
-                // IsHandleCreated check prevents
-                // notification errors during first load
-                // when control is not yet fully rendered
-                if (IsHandleCreated)
-                {
-                    HideNotification();
-                    ShowInfoNotification(
-                        $"Connected to " +
-                        $"{detail.OrganizationFriendlyName}. " +
-                        "Click Load Flows to begin.", null);
-
-                    // Enable buttons after connection
-                    if (tsbLoadFlows != null)
-                    {
-                        tsbLoadFlows.Enabled = true;
-                        tsbExportExcel.Enabled = false;
-                        tsbApplyFilter.Enabled = false;
-                        cboHealthStatus.Enabled = false;
-                        cboFlowStatus.Enabled = false;
-                    }
-                }
             }
+
+            // If the control is already loaded, update UI now.
+            // If not loaded yet, FlowGovernanceManagerControl_Load
+            // will handle it after the control finishes rendering.
+            //useful when switching the environments
+            if (IsHandleCreated && detail != null) 
+            {
+                HideNotification();
+                ShowInfoNotification(
+                    $"Connected to {detail.OrganizationFriendlyName}. " +
+                    "Click Load Flows to begin.", null);
+
+                tsbLoadFlows.Enabled = true;
+                tsbExportExcel.Enabled = false;
+                tsbApplyFilter.Enabled = false;
+                cboHealthStatus.Enabled = false;
+                cboFlowStatus.Enabled = false;
+            }
+            
         }
     }
 }

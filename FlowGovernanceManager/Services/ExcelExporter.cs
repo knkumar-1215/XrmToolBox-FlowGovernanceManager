@@ -51,7 +51,7 @@ namespace FlowGovernanceManager.Services
             if (lastRunDate == DateTime.MinValue)
                 return "Never";
 
-            return lastRunDate.ToString("MM/dd/yyyy hh:mm tt");
+            return lastRunDate.ToString("MM/dd/yyyy HH:mm");
         }
 
         private string GetHealthStatusText(HealthStatus status)

@@ -50,20 +50,24 @@ namespace FlowGovernanceManager.Services
 
             var result = _service.RetrieveMultiple(query);
 
-            return result.Entities.Select(e =>
-                new WorkflowModel
-                {
-                    WorkflowId = e.Id,
-                    Name = e.GetAttributeValue<string>("name"),
-                    StateCode = e.GetAttributeValue<OptionSetValue>(
-                                     "statecode")?.Value ?? 0,
-                    StatusCode = e.GetAttributeValue<OptionSetValue>(
-                                     "statuscode")?.Value ?? 0,
-                    OwnerId = e.GetAttributeValue<EntityReference>(
-                                     "ownerid")?.Id ?? Guid.Empty,
-                    CreatedOn = e.GetAttributeValue<DateTime>("createdon"),
-                    ModifiedOn = e.GetAttributeValue<DateTime>("modifiedon")
-                }).ToList();
+            var flows = result.Entities.Select(e => new WorkflowModel
+            {
+                WorkflowId = e.Id,
+                Name = e.GetAttributeValue<string>("name"),
+                StateCode = e.GetAttributeValue<OptionSetValue>(
+                     "statecode")?.Value ?? 0,
+                StatusCode = e.GetAttributeValue<OptionSetValue>(
+                     "statuscode")?.Value ?? 0,
+                OwnerId = e.GetAttributeValue<EntityReference>(
+                     "ownerid")?.Id ?? Guid.Empty,
+                OwnerName = e.GetAttributeValue<EntityReference>(
+                     "ownerid")?.Name ?? "",
+                CreatedOn = e.GetAttributeValue<DateTime>("createdon"),
+                ModifiedOn = e.GetAttributeValue<DateTime>("modifiedon")
+            }).ToList();
+
+            // Exclude flows owned by SYSTEM
+            return flows.Where(f => f.OwnerName != "SYSTEM").ToList();
         }
 
         /// <summary>
@@ -213,8 +217,7 @@ namespace FlowGovernanceManager.Services
                     FlowId = workflow.WorkflowId,
                     FlowName = workflow.Name,
                     OwnerName = owner?.FullName ?? "Unknown",
-                    IsOwnerActive = owner != null
-                                          && !owner.IsDisabled,
+                    IsOwnerActive = owner != null && !owner.IsDisabled,
                     IsFlowActive = workflow.StateCode == 1,
                     LastRunDate = lastRunDate,
                     TotalRunsInLast30Days = totalRuns,

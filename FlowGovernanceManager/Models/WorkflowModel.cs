@@ -13,6 +13,7 @@ namespace FlowGovernanceManager.Models
         public int StateCode { get; set; }
         public int StatusCode { get; set; }
         public Guid OwnerId { get; set; }
+        public string OwnerName { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         public Guid SolutionId { get; set; }
