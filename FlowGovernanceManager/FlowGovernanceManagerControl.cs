@@ -243,7 +243,7 @@ namespace FlowGovernanceManager
                 new DataGridViewTextBoxColumn
                 {
                     Name       = "colLastRunDate",
-                    HeaderText = "Last Run Date",
+                    HeaderText = "Last Successful Run",
                     FillWeight = 15
                 },
                 new DataGridViewTextBoxColumn

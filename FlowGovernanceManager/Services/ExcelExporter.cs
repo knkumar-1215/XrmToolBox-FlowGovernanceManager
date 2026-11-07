@@ -31,7 +31,7 @@ namespace FlowGovernanceManager.Services
                     { "Owner",             flow.OwnerName },
                     { "Health Score",      flow.HealthScore },
                     { "Health Status",     GetHealthStatusText(flow.HealthStatus) },
-                    { "Last Run Date",     GetLastRunDateText(flow.LastRunDate) },
+                    { "Last Successful Run",     GetLastRunDateText(flow.LastRunDate) },
                     { "Error Rate %",      flow.ErrorRate },
                     { "Flow Status",       flow.IsFlowActive ? "On" : "Off" },
                     { "Solution",          flow.SolutionName ?? "" },

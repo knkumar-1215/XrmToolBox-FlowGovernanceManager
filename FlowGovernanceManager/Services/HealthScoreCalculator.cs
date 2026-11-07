@@ -24,7 +24,8 @@ namespace FlowGovernanceManager.Services
         private const int NoRun90DaysDeduction = 20;
         private const int ErrorRateMediumDeduction = 20;
         private const int NoRun30DaysDeduction = 10;
-        private const int FlowOffDeduction = 10;
+        private const int FlowOffDeduction = 20;
+        private const int NeverRunDeduction = 40;
 
         // Thresholds
         private const int ErrorRateHighThreshold = 50;
@@ -52,7 +53,9 @@ namespace FlowGovernanceManager.Services
                 score -= ErrorRateMediumDeduction;
 
             // Deduct for no recent runs
-            if (flow.DaysSinceLastRun > InactiveDaysLong)
+            if (flow.LastRunDate == DateTime.MinValue)
+                score -= NeverRunDeduction;
+            else if (flow.DaysSinceLastRun > InactiveDaysLong)
                 score -= NoRun90DaysDeduction;
             else if (flow.DaysSinceLastRun > InactiveDaysShort)
                 score -= NoRun30DaysDeduction;
