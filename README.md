@@ -2,7 +2,7 @@
 
 A free XrmToolBox plugin that gives you a health score for every Power Automate flow in your Dataverse environment — so you can find and fix problems before they become incidents.
 
-![Main View](docs/screenshots/main-view.png)
+![Main View](Docs/Screenshots/main-view.png)
 
 ## Why I built this
 
@@ -31,13 +31,13 @@ Scores 70 and above are Healthy. 40 to 69 are At Risk. Below 40 are Critical.
 ## Screenshots
 
 ### All flows loaded
-![Main View](docs/screenshots/main-view.png)
+![Main View](Docs/Screenshots/main-view.png)
 
 ### Filtered by health status
-![Filter View](docs/screenshots/filter-view.png)
+![Filter View](Docs/Screenshots/filter-view.png)
 
 ### Export to Excel
-![Excel Export](docs/screenshots/excel-export.png)
+![Excel Export](Docs/Screenshots/excel-export.png)
 
 ## Installation
 
@@ -70,9 +70,19 @@ Open the solution in Visual Studio 2022 and build. NuGet will restore XrmToolBox
 
 ## What is coming next
 
-V2 will add bulk ownership reassignment, environment comparison across DEV/UAT/PROD, deprecated connector detection, configurable scoring thresholds, and a flow dependency map.
+V2:
+- Bulk ownership reassignment
+- Environment comparison across DEV, UAT, and PROD
+- Deprecated connector detection
+- Configurable scoring thresholds
+- Flow dependency map
 
-V3 will add AI-assisted flow analysis, natural language search, predictive health alerts, automated governance reports, and a governance policy engine.
+V3:
+- AI-assisted flow analysis
+- Natural language search
+- Predictive health alerts
+- Automated governance reports
+- Governance policy engine
 
 ## Author
 
