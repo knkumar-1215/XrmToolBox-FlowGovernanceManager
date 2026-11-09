@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>FlowGovernanceManager</id>
+    <version>1.0.0</version>
+    <title>Flow Governance Manager</title>
+    <authors>Nagendra kumar Kosaraju</authors>
+    <owners>Nagendra kumar Kosaraju</owners>
+    <description>Identify and remediate unhealthy Power Automate flows at scale. Health scoring, color coded dashboard, ownerless flow detection, inactive flow detection, and Excel export.</description>
+    <projectUrl>https://github.com/knkumar-1215/XrmToolBox-FlowGovernanceManager</projectUrl>
+    <license type="expression">MIT</license>
+    <readme>README.md</readme>
+    <tags>XrmToolBox PowerAutomate Flow Governance Dataverse PowerPlatform</tags>
+    <releaseNotes>Initial release - V1.0</releaseNotes>
+    <dependencies>
+      <group targetFramework="net462" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="FlowGovernanceManager\bin\Release\FlowGovernanceManager.dll" target="lib\net462" />
+    <file src="README.md" target="" />
+  </files>
+</package>
