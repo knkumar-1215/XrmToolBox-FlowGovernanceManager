@@ -2,7 +2,7 @@
 
 A free XrmToolBox plugin that gives you a health score for every Power Automate flow in your Dataverse environment — so you can find and fix problems before they become incidents.
 
-![Main View](Docs/Screenshots/main-view.png)
+![Main View](Docs/ScreenShots/main-view.png)
 
 ## Why I built this
 
@@ -31,13 +31,13 @@ Scores 70 and above are Healthy. 40 to 69 are At Risk. Below 40 are Critical.
 ## Screenshots
 
 ### All flows loaded
-![Main View](Docs/Screenshots/main-view.png)
+![Main View](Docs/ScreenShots/main-view.png)
 
 ### Filtered by health status
-![Filter View](Docs/Screenshots/filter-view.png)
+![Filter View](Docs/ScreenShots/filter-view.png)
 
 ### Export to Excel
-![Excel Export](Docs/Screenshots/excel-export.png)
+![Excel Export](Docs/ScreenShots/excel-export.png)
 
 ## Installation
 
