@@ -2,18 +2,21 @@
 <package>
   <metadata>
     <id>FlowGovernanceManager</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>Flow Governance Manager</title>
     <authors>Nagendra kumar Kosaraju</authors>
     <owners>Nagendra kumar Kosaraju</owners>
     <description>Identify and remediate unhealthy Power Automate flows at scale. Health scoring, color coded dashboard, ownerless flow detection, inactive flow detection, and Excel export.</description>
     <projectUrl>https://github.com/knkumar-1215/XrmToolBox-FlowGovernanceManager</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/knkumar-1215/XrmToolBox-FlowGovernanceManager/main/Docs/ScreenShots/main-view.png</iconUrl>
     <license type="expression">MIT</license>
     <readme>README.md</readme>
     <tags>XrmToolBox PowerAutomate Flow Governance Dataverse PowerPlatform</tags>
-    <releaseNotes>Initial release - V1.0</releaseNotes>
+    <releaseNotes>Bug fix release - added logo URL and XrmToolBox dependency</releaseNotes>
     <dependencies>
-      <group targetFramework="net462" />
+      <group targetFramework="net462">
+        <dependency id="XrmToolBox" version="1.2023.1.70" />
+      </group>
     </dependencies>
   </metadata>
   <files>
