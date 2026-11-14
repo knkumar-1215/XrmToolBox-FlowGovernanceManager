@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>FlowGovernanceManager</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>Flow Governance Manager</title>
     <authors>Nagendra kumar Kosaraju</authors>
     <owners>Nagendra kumar Kosaraju</owners>
@@ -12,15 +12,13 @@
     <license type="expression">MIT</license>
     <readme>README.md</readme>
     <tags>XrmToolBox PowerAutomate Flow Governance Dataverse PowerPlatform</tags>
-    <releaseNotes>Bug fix release - added logo URL and XrmToolBox dependency</releaseNotes>
+    <releaseNotes>Fix NuGet package structure for XrmToolBox store compatibility</releaseNotes>
     <dependencies>
-      <group targetFramework="net462">
-        <dependency id="XrmToolBox" version="1.2023.1.70" />
-      </group>
+      <dependency id="XrmToolBox" version="1.2023.1.70" />
     </dependencies>
   </metadata>
   <files>
-    <file src="FlowGovernanceManager\bin\Release\FlowGovernanceManager.dll" target="lib\net462" />
+    <file src="FlowGovernanceManager\bin\Release\FlowGovernanceManager.dll" target="lib\net462\Plugins" />
     <file src="README.md" target="" />
   </files>
 </package>
