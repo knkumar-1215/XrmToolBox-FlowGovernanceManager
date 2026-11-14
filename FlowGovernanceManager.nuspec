@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>FlowGovernanceManager</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <title>Flow Governance Manager</title>
     <authors>Nagendra kumar Kosaraju</authors>
     <owners>Nagendra kumar Kosaraju</owners>
@@ -12,9 +12,9 @@
     <license type="expression">MIT</license>
     <readme>README.md</readme>
     <tags>XrmToolBox PowerAutomate Flow Governance Dataverse PowerPlatform</tags>
-    <releaseNotes>Fix XrmToolBox dependency package id</releaseNotes>
+    <releaseNotes>Update XrmToolBoxPackage dependency to latest version</releaseNotes>
     <dependencies>
-      <dependency id="XrmToolBoxPackage" version="1.2023.1.70" />
+      <dependency id="XrmToolBoxPackage" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
